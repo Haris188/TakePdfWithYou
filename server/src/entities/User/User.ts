@@ -13,8 +13,25 @@ export default class User{
         return new this(userData)
     }
 
+    public static async getFromDbWithEmailAndPass(email: string, password:string){
+        const res = await DbAccess.Users.get({email, password})
+        return res.length > 0
+        ? new this(res[0])
+        : null
+    }
+
     public async register(){
         return await DbAccess
         .Users.store(this.userData)
+    }
+
+    public getInfo(){
+        return this.userData || null
+    }
+
+    public async changePassword(password){
+        return await DbAccess
+        .Users
+        .updateWhere({id:this.userData.id}, {password})
     }
 }
