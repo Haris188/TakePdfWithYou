@@ -3,7 +3,7 @@ import {UserDataType} from '.'
 import DbAccess from '../DbAccess'
 
 export default class User{
-    private userData
+    private userData:UserDataType
 
     constructor(userData:UserDataType){
         this.userData = userData
