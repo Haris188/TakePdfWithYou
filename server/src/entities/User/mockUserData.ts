@@ -4,6 +4,7 @@ export const def = {
     name: 'Haris',
     email: 'haris@gmail.com',
     password: '23423423',
+    pdfs:[]
 }
 
 export const failedRegister = null

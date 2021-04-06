@@ -1,4 +1,5 @@
 import FileAccess from './FileAccess'
+import FileDataType from '../Pdf/FileDataType'
 
 export default class TestFileAccess implements FileAccess{
     private path: string
@@ -15,7 +16,7 @@ export default class TestFileAccess implements FileAccess{
         return new File([], `${fileName}.pdf`)
     }
 
-    public async uploadFile(file){
-        return file
+    public async uploadFile(file: FileDataType){
+        return {downloadLink: 'download'}
     }
 }

@@ -1,5 +1,5 @@
 
-import { UserDataType, mockUserData } from '../User'
+import User, { UserDataType, mockUserData } from '../User'
 import DbAccess, {UserAccessSchema} from './DbAccess'
 import {isMatch} from 'lodash'
 
@@ -42,6 +42,17 @@ class UserSchema implements UserAccessSchema{
         })
         this.dataStore.users = newUsers
         return {id:updatedLast}
+    }
+
+    public async appendPdf(pdfInfo){
+        const updated = this.dataStore.users.map(user=>{
+            if(user.id == pdfInfo.userId){
+                user.pdfs.push({id: pdfInfo.id, downloadLink: pdfInfo.downloadLink})
+            }
+            return user
+        })
+        this.dataStore.users = updated
+        return {id: pdfInfo.id}
     }
 }
 

@@ -34,4 +34,10 @@ export default class User{
         .Users
         .updateWhere({id:this.userData.id}, {password})
     }
+
+    public async addNewPdfInfo(pdfInfo){
+        return await DbAccess
+        .Users
+        .appendPdf(pdfInfo)
+    }
 }

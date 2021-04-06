@@ -4,4 +4,5 @@ export interface UserDataType{
     name?: string
     email?: string
     password?: string
+    pdfs?: Array<{id:string, downloadLink:string}>
 }
