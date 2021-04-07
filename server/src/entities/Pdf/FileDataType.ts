@@ -7,3 +7,9 @@ export default interface FileDataType{
     }
     file: Object
 }
+
+export interface PdfType {
+    id?: string
+    downloadLink?: string
+    bookmark?:string
+}

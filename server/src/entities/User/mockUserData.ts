@@ -4,7 +4,11 @@ export const def = {
     name: 'Haris',
     email: 'haris@gmail.com',
     password: '23423423',
-    pdfs:[]
+    pdfs:[{
+        id: '1',
+        downloadLink: 'download ling',
+        bookmark: '1'
+    }]
 }
 
 export const failedRegister = null

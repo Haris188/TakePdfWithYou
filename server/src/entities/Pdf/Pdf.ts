@@ -1,17 +1,34 @@
-
+import DbAccess from '../DbAccess'
 import FileAccess from '../FileAccess'
-import FileDataType from './FileDataType'
+import FileDataType, { PdfType } from './FileDataType'
 
 
 export default class {
-    private file:FileDataType
+    private file: any
 
-    constructor(file: FileDataType){
+    constructor(file: FileDataType|PdfType){
         this.file = file
     }
 
     public static createFromData(file:FileDataType){
         return new this(file)
+    }
+
+    public static async getUsingId(pdfData:PdfType){
+        const pdf = await DbAccess.Pdfs.getWhere({id: pdfData.id})
+        if(pdf[0]){
+            return new this(pdf[0])
+        }
+        else{
+            throw new Error('Cant fetch the PDF. It might not exist')
+        }
+    }
+
+    public async saveBookmark(page: string){
+        DbAccess.Pdfs.updateWhere(
+            {id: this.file.id}, 
+            {bookmark: page}
+        )
     }
 
     public async upload(){
