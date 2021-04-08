@@ -68,7 +68,7 @@ class UserSchema implements UserAccessSchema{
             return user
         })
         dataStore.setStore({...dataStore.getStore(), users: newUsers})
-        return {id:updatedLast}
+        return 'updated'
     }
 }
 

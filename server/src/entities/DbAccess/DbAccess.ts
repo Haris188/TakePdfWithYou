@@ -7,9 +7,9 @@ export default interface DbAccess {
 }
 
 export interface UserAccessSchema {
-    get(where: UserDataType): Promise<UserDataType[]>
+    get(where?: UserDataType): Promise<UserDataType[]>
     store(data: UserDataType): Promise<{id:string}>
-    updateWhere(where: UserDataType, data: UserDataType): Promise<{id:string}>
+    updateWhere(where: UserDataType, data: UserDataType): Promise<string>
     resetDataStore():void //only for testing
 }
 
