@@ -24,8 +24,9 @@ export default class {
         }
     }
 
-    public async saveBookmark(page: string){
-        DbAccess.Pdfs.updateWhere(
+    public async saveBookmark(userId:string, page: string){
+        return await DbAccess.Pdfs.updateWhere(
+            userId,
             {id: this.file.id}, 
             {bookmark: page}
         )

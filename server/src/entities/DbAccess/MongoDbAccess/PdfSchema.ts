@@ -2,55 +2,70 @@ import {PdfAccessSchema} from '../DbAccess'
 import {dataStore} from '../TestDbAccess'
 import { PdfType } from '../../Pdf/FileDataType'
 import {isMatch} from 'lodash'
+import MongoStore, { modifyIdKeysToMongo, revertKeyModification } from './MongoStore'
 
 
 
 export default class PdfSchema implements PdfAccessSchema{
-    public async appendPdf(pdfInfo){
-        const updated = dataStore.getStore().users.map(user=>{
-            if(user.id == pdfInfo.userId){
-                user.pdfs.push({id: pdfInfo.id, downloadLink: pdfInfo.downloadLink})
-            }
-            return user
-        })
-        dataStore.setStore({...dataStore.getStore(), users: updated})
-        return {id: pdfInfo.id}
+    public async appendPdf(pdfInfo, userId){
+        try {
+            const con = await MongoStore.connectDb()
+            const query = con.collection('users')
+
+            const mongoWhere = modifyIdKeysToMongo({id:userId})
+
+            const res = await query.updateOne(mongoWhere,{
+                $push: {pdfs: modifyIdKeysToMongo(pdfInfo)}
+            })
+
+            return {id:res.modifiedCount == 1 ? pdfInfo.id : null}
+        } catch (error) {
+            console.log('MONGO: FAILED TO APPEND PDF')
+            console.log(error)
+            return {id:null}
+        }
     }
 
     public async getWhere(where: PdfType){
-        const users = dataStore.getStore().users
-        if(where){
-            // console.log(users)
-            return users.map(user=>(
-                user.pdfs.find(pdf=>isMatch(pdf, where))
-            ))
+        try {
+            const con = await MongoStore.connectDb()
+            const query = con.collection('users')
+
+            const mongoWhere = modifyIdKeysToMongo(where)
+
+            const res = mongoWhere 
+            ? await query.find({pdfs: mongoWhere}).toArray()
+            : await query.find({pdfs: {}}).toArray()
+
+            return revertKeyModification(res)
+        } catch (error) {
+            console.log('MONGO: FAILED TO GET PDFS')
+            console.log(error)
+            return []
         }
-        return []
     }
 
-    public async updateWhere(where: PdfType, data: PdfType){
+    public async updateWhere(userId:string, where: PdfType, data: PdfType){
         try{
-            const users = dataStore.getStore().users
-            let found
-            if(where){
-                const pdfMatch = users.map(user=>{
-                    const m = user.pdfs.map(pdf=>{
-                        if(isMatch(pdf, where)){
-                            return {...pdf, ...data}
-                            found = pdf.id
-                        }
-                        return pdf
-                    })
-                    user.pdfs = m
-                    return user
-                })
-                dataStore.setStore({...dataStore.getStore(), users: pdfMatch})
-            }
-            return found ? this.getWhere({id: found}) : []
+            const con = await MongoStore.connectDb()
+            const query = con.collection('users')
+
+            const getRes = await query.findOne({_id:userId})
+            const pdfs = getRes && getRes.pdfs
+
+            const newPdfs = pdfs.map(pdf=>{
+                if(isMatch(pdf, where)) return {...pdf, ...data}
+                return pdf
+            })
+
+            const res = await query.updateOne({_id:userId}, {$set:{pdfs:newPdfs}})
+            return res.matchedCount.toString()
+
         }
         catch(e){
             console.log(e)
             throw new Error('FAILED TO  UPDATE PDF DATA')
+            return null
         }
     }
 }

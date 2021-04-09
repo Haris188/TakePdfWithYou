@@ -38,11 +38,16 @@ export default class User{
     public async addNewPdfInfo(pdfInfo){
         return await DbAccess
         .Pdfs
-        .appendPdf(pdfInfo)
+        .appendPdf(pdfInfo, this.userData.id)
     }
 
     public async getAllPdfs(){
         const res = await DbAccess.Users.get({id: this.userData.id})
         return res && res[0] ? res[0].pdfs : []
+    }
+
+    public async getFromDb(){
+        const res = await DbAccess.Users.get({id:this.userData.id})
+        return res[0]
     }
 }

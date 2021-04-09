@@ -8,9 +8,12 @@ const mockBookmarkData ={
 
 describe('Actions.saveBookmark', () => {
     it('should save bookmark page number to the provided pdf id', async ()=>{
-        await actions.saveBookmark(mockBookmarkData.fileId, mockBookmarkData.bookmark)
+        const res = await actions.saveBookmark(
+            '1', 
+            mockBookmarkData.fileId, 
+            mockBookmarkData.bookmark
+        )
 
-        const res = await DbAccess.Pdfs.getWhere({id: mockBookmarkData.fileId})
-        expect(res[0].bookmark).toBe(mockBookmarkData.bookmark)
+        expect(res).toBe("1")
     })
 });

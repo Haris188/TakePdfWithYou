@@ -14,7 +14,7 @@ export interface UserAccessSchema {
 }
 
 export interface PdfAccessSchema {
-    appendPdf(pdfInfo:{id:string, downloadLink:string, userId}): Promise<{id:string}>
+    appendPdf(pdfInfo:{id:string, downloadLink:string, bookmark}, userId:string): Promise<{id:string}>
     getWhere(where: PdfType): Promise<PdfType[]>
-    updateWhere(where: PdfType, data:PdfType): Promise<PdfType[]>
+    updateWhere(userId:string, where: PdfType, data:PdfType): Promise<string>
 }

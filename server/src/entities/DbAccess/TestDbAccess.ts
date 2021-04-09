@@ -96,16 +96,16 @@ class Pdf implements PdfAccessSchema{
         return []
     }
 
-    public async updateWhere(where: PdfType, data: PdfType){
+    public async updateWhere(userId:string, where: any, data: PdfType){
         try{
             const users = dataStore.getStore().users
-            let found
+            let found = 0
             if(where){
                 const pdfMatch = users.map(user=>{
                     const m = user.pdfs.map(pdf=>{
                         if(isMatch(pdf, where)){
+                            found += 1
                             return {...pdf, ...data}
-                            found = pdf.id
                         }
                         return pdf
                     })
@@ -114,7 +114,7 @@ class Pdf implements PdfAccessSchema{
                 })
                 dataStore.setStore({...dataStore.getStore(), users: pdfMatch})
             }
-            return found ? this.getWhere({id: found}) : []
+            return found.toString()
         }
         catch(e){
             console.log(e)

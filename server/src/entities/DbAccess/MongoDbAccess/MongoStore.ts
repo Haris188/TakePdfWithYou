@@ -22,7 +22,6 @@ const connectDb = async ()=>{
 export const modifyIdKeysToMongo = (queryObject, revert?:boolean)=>{
     if(queryObject && (queryObject[revert? "_id": "id"])){
         const obj = mapKeys(queryObject, (value, key)=>{
-            console.log(key)
             if (key === (revert? "_id": "id")) return (revert? "id": "_id")
             return key
         })

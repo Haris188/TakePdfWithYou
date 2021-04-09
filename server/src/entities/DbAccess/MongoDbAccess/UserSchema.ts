@@ -1,7 +1,6 @@
 import {UserAccessSchema} from '../DbAccess'
 import {dataStore} from '../TestDbAccess'
-import {isMatch} from 'lodash'
-import User, { UserDataType, mockUserData } from '../../User'
+import { UserDataType } from '../../User'
 import MongoStore, {
     modifyIdKeysToMongo, 
     revertKeyModification
