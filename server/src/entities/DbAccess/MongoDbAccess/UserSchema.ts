@@ -24,9 +24,8 @@ export default class UserSchema implements UserAccessSchema{
 
             return revertKeyModification(res)
         } catch (error) {
-            console.log('MONGO: FAILED TO RETRIEVE DATA')
             console.log(error)
-            return []
+            throw new Error('MONGO: FAILED TO RETRIEVE DATA')
         }
     }
 
@@ -39,9 +38,8 @@ export default class UserSchema implements UserAccessSchema{
             const res = await query.insertOne(modifiedData)
             return {id: res.insertedId || null}
         } catch (error) {
-            console.log('MONGO: FAILED TO STORE DATA')
             console.log(error)
-            return {id:null}
+            throw new Error('MONGO: FAILED TO STORE DATA')
         }
     }
 
@@ -55,9 +53,8 @@ export default class UserSchema implements UserAccessSchema{
             const res = await query.updateMany(modifiedWhere, {$set:modifiedData})
             return res.modifiedCount.toString()
         } catch (error) {
-            console.log('MONGO: FAILED TO UPDATE THE DATA')
             console.log(error)
-            return null
+            throw new Error('MONGO: FAILED TO UPDATE THE DATA')
         }
     }
 }

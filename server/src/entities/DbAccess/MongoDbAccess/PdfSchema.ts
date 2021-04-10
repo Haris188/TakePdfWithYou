@@ -20,9 +20,8 @@ export default class PdfSchema implements PdfAccessSchema{
 
             return {id:res.modifiedCount == 1 ? pdfInfo.id : null}
         } catch (error) {
-            console.log('MONGO: FAILED TO APPEND PDF')
             console.log(error)
-            return {id:null}
+            throw new Error('MONGO:FAILED TO APPEND PDF')
         }
     }
 
@@ -39,9 +38,8 @@ export default class PdfSchema implements PdfAccessSchema{
 
             return revertKeyModification(res)
         } catch (error) {
-            console.log('MONGO: FAILED TO GET PDFS')
             console.log(error)
-            return []
+            throw new Error('MONGO: FAILED TO GET PDFS')
         }
     }
 
