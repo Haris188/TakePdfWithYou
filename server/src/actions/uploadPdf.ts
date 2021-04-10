@@ -14,7 +14,8 @@ export default async(file)=>{
             id: file.meta.fileId,
             name: file.meta.filename,
             downloadLink,
-            userId: file.meta.userId
+            userId: file.meta.userId,
+            bookmark: '1'
         })
     }
     catch(e){

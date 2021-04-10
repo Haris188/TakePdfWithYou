@@ -10,7 +10,7 @@ export default class {
         this.file = file
     }
 
-    public static createFromData(file:FileDataType){
+    public static createFromData(file:any){
         return new this(file)
     }
 

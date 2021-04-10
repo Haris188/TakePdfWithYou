@@ -1,6 +1,8 @@
+import actions from "../../actions"
 
 export default (app)=>{
-    app.post('/pdfs-info', (req,res)=>{
-        
+    app.get('/pdfs-info', async (req,res)=>{
+        const result = await actions.getPdfInfo(req.user.id)
+        res.send(result)
     })
 }
