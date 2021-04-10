@@ -8,6 +8,6 @@ export default async (userId:string, password: string)=>{
     catch(e){
         console.log('FAILED TO CHANGE THE PASSWORD')
         console.log(e)
-        return null
+        return {error: 'Failed to change the password'}
     }
 }

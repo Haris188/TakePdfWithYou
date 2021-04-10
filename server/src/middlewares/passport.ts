@@ -14,6 +14,7 @@ export default (app)=>{
     }, (email, password, cb)=>{
         return actions.getUserWithEmailAndPass(email, password)
         .then(user=>{
+            console.log(user)
             if(!user) return cb(null, false,{message: "Incorrect email or password"})
             return cb(null, user, {message:'Logged in successfully'})
         })

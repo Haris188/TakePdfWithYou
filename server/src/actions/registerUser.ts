@@ -10,6 +10,6 @@ export default async (userData: UserDataType)=>{
     catch(e){
         console.log('USER REGISTRATION FAILED')
         console.log(e)
-        return []
+        return {error: 'Failed user registration'}
     }
 }

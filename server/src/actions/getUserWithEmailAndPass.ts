@@ -8,6 +8,6 @@ export default async (email, password)=>{
     catch(e){
         console.log('COULD NOT FETCH A USER WITH EMAIL AND PASSWORD')
         console.log(e)
-        return null
+        return {error:'Could not fetch a user with email and password'}
     }
 }

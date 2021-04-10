@@ -7,6 +7,6 @@ export default async (userId:string, pdfId: string, pageNumber: string)=>{
     } catch (e) {
         console.log('FAILED TO SAVE BOOKMARK')
         console.log((e))
-        return null
+        return {error: 'Failed to save bookmard'}
     }
 }

@@ -15,7 +15,7 @@ export default class PdfSchema implements PdfAccessSchema{
             const mongoWhere = modifyIdKeysToMongo({id:userId})
 
             const res = await query.updateOne(mongoWhere,{
-                $push: {pdfs: modifyIdKeysToMongo(pdfInfo)}
+                $push: {pdfs: pdfInfo}
             })
 
             return {id:res.modifiedCount == 1 ? pdfInfo.id : null}

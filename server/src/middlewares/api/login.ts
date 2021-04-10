@@ -19,9 +19,12 @@ export default (app)=>{
             req.login(user, {session:false}, (err)=>{
                 if(err) res.send(err)
 
-                const token = jwt.sign(user, process.env.JWT_SECRET)
+                const token = jwt.sign(
+                    user, 
+                    process.env.JWT_SECRET, 
+                    {expiresIn: '1h'})
                 return res.json({user, token})
             })
-        })(req,res)
+        })(req,res, next)
     })
 }

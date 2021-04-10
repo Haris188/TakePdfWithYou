@@ -7,6 +7,6 @@ export default async (id:string)=>{
     } catch (error) {
         console.log('FAILED TO GET USER WITH ID')
         console.log(error)
-        return null
+        return {error: 'Failed to get user with Id'}
     }
 }

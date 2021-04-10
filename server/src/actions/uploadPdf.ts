@@ -12,6 +12,7 @@ export default async(file)=>{
         
         return thisUser.addNewPdfInfo({
             id: file.meta.fileId,
+            name: file.meta.filename,
             downloadLink,
             userId: file.meta.userId
         })
@@ -19,6 +20,6 @@ export default async(file)=>{
     catch(e){
         console.log('FAILED TO UPLOAD FILE')
         console.log(e)
-        return null
+        return {error: 'failed to upload file'}
     }
 }
