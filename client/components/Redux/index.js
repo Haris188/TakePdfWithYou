@@ -5,9 +5,11 @@ import {
 import {combineReducers} from 'redux'
 import reduxThunk from 'redux-thunk'
 import signInSlice from '../signin/signInSlice'
+import signupSlice from '../signup/signupSlice'
 
 const reducer = combineReducers({
-    signin: signInSlice
+    signin: signInSlice,
+    signup: signupSlice
 })
 
 export const store = configureStore({

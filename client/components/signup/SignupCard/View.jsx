@@ -1,25 +1,26 @@
 
 import React from 'react'
+
 import {
-    Container as MaterialContainer,
-    Card as MaterialCard,
     Typography,
-    TextField as MaterialTextField,
-    Button as MaterialButton,
-    withTheme,
     CircularProgress
 } from '@material-ui/core'
-import Link from 'next/link'
-import Flex from '../../Flex'
+
 import styled from 'styled-components'
 import * as yup from 'yup'
 import {Formik} from 'formik'
 import {useSelector, useDispatch} from 'react-redux'
+
 import {
     loadingSelector,
     loginErrSelector,
-    signIn
-} from '../signInSlice'
+} from '../../signin/signInSlice'
+
+import {
+    errorSelector as signupErrorSelector,
+    signup,
+    passwordErrorSelector
+} from '../signupSlice'
 
 import {
     Container,
@@ -27,30 +28,26 @@ import {
     HeadingTypography,
     ErrorTypography,
     Button,
-    TextField,
+    TextField
 } from '../../styled/auth'
 
-const StyledFlex = styled(Flex.SpaceBetween)`
+const MarginedDiv = styled.div`
  && {
-     margin-top: 1em;
-     align-items: center;
-     margin-bottom: 2em;
- }
-`
-const SmallTypography = styled(Typography)`
-  && {
-      font-size: 0.7em;
-  }
-`
-const BlueLink = styled.span`
- && {
-     color: ${props=>props.theme.palette.primary.main};
+     margin-top: 1.5em;
+     margin-bottom:2em;
  }
 `
 
+const formErrorMsgs = {
+    required: 'Required',
+    email: 'Email address is not valid'
+}
+
 const schema = yup.object().shape({
-    email: yup.string().email('Email address is not valid').required('Required'),
-    password: yup.string().required('Required')
+    name: yup.string().required(formErrorMsgs.required) ,
+    email: yup.string().email(formErrorMsgs.email).required(formErrorMsgs.required),
+    password: yup.string().required(formErrorMsgs.required),
+    confirmPassword: yup.string().required(formErrorMsgs.required)
 })
 
 const initialValues = {
@@ -61,20 +58,22 @@ const initialValues = {
 const View = ()=>{
     const loading = useSelector(loadingSelector)
     const loginError = useSelector(loginErrSelector)
+    const signupError = useSelector(signupErrorSelector)
+    const passwordErr = useSelector(passwordErrorSelector)
     const dispatch = useDispatch()
 
     const onSubmit = (data)=>{
-        dispatch(signIn(data))    
+        dispatch(signup(data))    
     }
 
     return (
         <Container>
             <Card>
                 <HeadingTypography>
-                    Sign In
+                    Sign Up
                 </HeadingTypography>
                 <Typography>
-                    Please sign in with your email and password
+                    Please fill in the fields with valid data
                 </Typography>
                 <Formik
                     initialValues = {initialValues}
@@ -87,6 +86,17 @@ const View = ()=>{
                        handleChange,
                     })=>(
                         <form onSubmit={handleSubmit}>
+                        <TextField 
+                            name='name'
+                            label = "Name"
+                            placeholder = "Enter your Name"
+                            helperText = {errors.name || "John Smith"}
+                            error={Boolean(errors.name)}
+                            color="primary"
+                            variant="outlined"
+                            onChange={handleChange}
+                            fullWidth
+                        />
                         <TextField 
                             name='email'
                             label = "Email"
@@ -110,7 +120,19 @@ const View = ()=>{
                             type="password"
                             fullWidth
                         />
-                        <StyledFlex>
+                        <TextField 
+                            name="confirmPassword"
+                            label = "Confirm Password"
+                            placeholder = "Enter your Password again"
+                            helperText = "Password"
+                            type="password"
+                            error={Boolean(errors.confirmPassword)}
+                            color="primary"
+                            variant="outlined"
+                            onChange={handleChange}
+                            fullWidth
+                        />
+                        <MarginedDiv>
                             {loading
                             ?   <CircularProgress size="1em"/>
                             :   <Button
@@ -119,21 +141,25 @@ const View = ()=>{
                                     variant = "contained"
                                     disabled={loading}
                                 >
-                                    Sign in
+                                    Sign up
                                 </Button>
                             }
-                            
-                            <div>
-                                <SmallTypography>
-                                    Dont have an account? <Link href="/signup"><BlueLink>Sign Up</BlueLink></Link>
-                                </SmallTypography>
-                            </div>
-                        </StyledFlex>
-                        {loginError && 
-                            <ErrorTypography>
-                                Login Failed
-                            </ErrorTypography>
-                        }
+                            {passwordErr && 
+                                <ErrorTypography>
+                                    Passwords do not match
+                                </ErrorTypography>
+                            }
+                            {signupError &&
+                                <ErrorTypography>
+                                    Signup Failed. Server might not be responding. Are you connected to internet?
+                                </ErrorTypography>
+                            }
+                            {loginError && 
+                                <ErrorTypography>
+                                    Login Failed
+                                </ErrorTypography>
+                            }
+                        </MarginedDiv>
                     </form>
                    )}
                 </Formik>

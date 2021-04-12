@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>          
+        <title>Sign in</title>          
       </Head>
 
       <SignInCard />
