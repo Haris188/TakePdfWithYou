@@ -5,7 +5,15 @@ const SpaceBetween = styled.div`
     display:flex;
     justify-content: space-between;
 `
+const OriginCenter = styled.div`
+    display:flex;
+    heigth: 100%;
+    width:100%;
+    justify-content: center;
+    align-items: center;
+`
 const Flex = {
-    SpaceBetween
+    SpaceBetween,
+    OriginCenter
 }
 export default Flex
