@@ -1,67 +1,26 @@
-import { CircularProgress, Container as MaterialContainer} from '@material-ui/core'
+import { 
+    CircularProgress, 
+    Container as MaterialContainer,
+    Snackbar,
+    Alert
+} from '@material-ui/core'
 import {Add as AddIcon} from '@material-ui/icons'
 import Flex from '../../Flex'
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import {useDispatch, useSelector} from 'react-redux'
+import {
+    pdfsSelector,
+    getPdfs,
+    loadingSelector,
+    errSelector,
+    uploadFile,
+    uploadErrorSelector,
+    setUploadError
+} from '../dashboardSlice'
+import { useRouter } from 'next/router'
 
-const mockData = [
-    {
-        id: '1',
-        name: 'Java for Dummies',
-        thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
-        read: '34'
-    },
-    {
-        id: '3',
-        name: 'Java for Dummies',
-        thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
-        read: '34'
-    },
-    {
-        id: '4',
-        name: 'Java for Dummies',
-        thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
-        read: '34'
-    },
-    {
-        id: '5',
-        name: 'Java for Dummies',
-        thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
-        read: '34'
-    },
-    {
-        id: '6',
-        name: 'Java for Dummies',
-        thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
-        read: '34'
-    },
-    {
-        id: '7',
-        name: 'Java for Dummies',
-        thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '8',
-        read: '34'
-    },
-    {
-        id: '8',
-        name: 'Java for Dummies',
-        thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
-        read: '34'
-    },
-]
+
 
 const ContainerDiv = styled.div`
     margin-top: 2em;
@@ -111,10 +70,23 @@ const Container = styled(MaterialContainer)`
         }
     }
 `
+const ErrorP = styled.p`
+    
+`
 
 const PdfThumbnail = ({pdf})=>{
+    const router = useRouter()
+
+    const navigateToPdfViewer = ()=>{
+        router.push({
+            pathname: '/pdf-viewer',
+            query: { fileLink: pdf.downloadLink}
+        },'pdf-viewer')
+    }
+
     return (
         <DashTile 
+            onClick = {navigateToPdfViewer}
             title={pdf.name}
             subtitle={`${pdf.read}% read`}
             body = {pdf.thumb}
@@ -130,7 +102,7 @@ const AddButton = ()=>(
 
 const DashTile = (props)=>{
     return (
-        <ContainerDiv>
+        <ContainerDiv onClick={props.onClick}>
             <BodyDiv>
                 {typeof props.body ==="string"
                     ? <PdfImg src={props.body}/>
@@ -145,9 +117,31 @@ const DashTile = (props)=>{
     )
 }
 
-const OpenFileTile = ()=>{
+const ErrorMessage = ()=>(
+    <Flex.OriginCenter>
+        <ErrorP>Failed to fetch your pdfs. Make sure you are connected to the internet</ErrorP>
+    </Flex.OriginCenter>
+)
+
+const OpenFileTile = (props)=>{
+    const triggerFileUpload = ()=>{
+        const fileInput = document.createElement('input')
+        fileInput.id = 'file-input'
+        fileInput.type = 'file'
+        fileInput.style.display = "none"
+
+        fileInput.onchange = (e)=>{
+            const formData = new FormData()
+            formData.append('file', e.target.files[0])
+            props.onChoose(formData)
+        }
+
+        fileInput.click()
+    }
+
     return (
         <DashTile 
+            onClick = {triggerFileUpload}
             title='Open a PDF'
             subtitle="Click this tile to upload a pdf"
             body = {AddButton}
@@ -156,20 +150,39 @@ const OpenFileTile = ()=>{
 }
 
 const PdfPreviews = ()=>{
-    const pdfs = mockData
+    const pdfs = useSelector(pdfsSelector)
+    const err = useSelector(errSelector)
+    const loading = useSelector(loadingSelector)
+    const fileErr = useSelector(uploadErrorSelector)
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(getPdfs())
+    },[])
 
     return (
-        <Container>
-            {pdfs
-                ? <div>
-                    <OpenFileTile />
-                    {pdfs.map(pdf=>
-                        <PdfThumbnail pdf={pdf} />
-                    )}
-                </div>
-                : <Flex.OriginCenter>
-                    <CircularProgress />
+        <Container id="dash-container">
+            <Snackbar 
+                open={fileErr} 
+                autoHideDuration={6000} 
+                message="Failed to upload Pdf. Can't connect to server"
+                onClose={()=>dispatch(setUploadError(false))}
+            />  
+
+            {loading
+                ? <Flex.OriginCenter>
+                        <CircularProgress />
                 </Flex.OriginCenter>
+                : err
+                    ? <ErrorMessage />
+                    : <>
+                        <OpenFileTile 
+                            onChoose={file=>dispatch(uploadFile(file))}
+                        />
+                        {pdfs.map(pdf=>
+                            <PdfThumbnail key={pdf.id} pdf={pdf} />
+                        )}
+                    </>
             }
         </Container>
     )

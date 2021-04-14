@@ -30,7 +30,7 @@
 // }
 
 import React from 'react';
-import Document, { Head, Main, NextScript } from 'next/document';
+import Document, { Head, Main, NextScript, Html } from 'next/document';
 import { ServerStyleSheet } from 'styled-components'
 import { ServerStyleSheets } from '@material-ui/styles';
 import theme from '../theme';
@@ -63,7 +63,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <html lang="en" dir="ltr">
+      <Html lang="en" dir="ltr">
         <Head>
           <meta charSet="utf-8" />
           {/* Use minimum-scale=1 to enable GPU rasterization */}
@@ -85,7 +85,7 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }
