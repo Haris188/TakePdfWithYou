@@ -80,7 +80,10 @@ const PdfThumbnail = ({pdf})=>{
     const navigateToPdfViewer = ()=>{
         router.push({
             pathname: '/pdf-viewer',
-            query: { fileLink: pdf.downloadLink}
+            query: { 
+                fileLink: pdf.downloadLink,
+                bookmark: pdf.bookmark
+            }
         },'pdf-viewer')
     }
 
