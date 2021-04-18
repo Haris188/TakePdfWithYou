@@ -4,6 +4,7 @@ import  {pdfjs, Document, Page } from 'react-pdf';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import VisibilitySensor from 'react-visibility-sensor'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux';
 import {
     scrollIntoView,
@@ -25,6 +26,7 @@ const CenterDiv = styled.div`
 `
 const ContainerDiv = styled.div`
     width: 100%;
+    padding-top: 4em;
 `
 
 export const createPageElemFor = (pageIndex)=>{
@@ -40,6 +42,7 @@ const Viewer = (props)=>{
     const gotoPage = useSelector(gotoSelector)
     const totalPages = useSelector(numPagesSelector)
     const dispatch = useDispatch()
+    const router = useRouter()
     let lastPage;
 
     useEffect(async ()=>{
@@ -47,17 +50,19 @@ const Viewer = (props)=>{
         const doc = await pdfjs.getDocument(props.fileLink)
         .promise
 
-        console.log(doc.numPages)
-        
         dispatch(setNumPages(doc.numPages))
         dispatch(scrollIntoView(props.bookmark))
     },[])
 
+    useEffect(() => {
+        router.events.on('routeChangeStart', saveBookmarkToServer)
+        return () => {
+          router.events.off('routeChangeStart', saveBookmarkToServer)
+        }
+    }, [router.asPath])
+
     useEffect(()=>{
-        console.log('goto called')
-        console.log(gotoPage)
         var checkExist = setInterval(function() {
-            //console.log($(`#page-${gotoPage}`))
             if ($(`#page-${gotoPage}`).length) {
                const el = document.getElementById(`page-${gotoPage}`)
                el.scrollIntoView()
@@ -65,6 +70,23 @@ const Viewer = (props)=>{
             }
          }, 100);
     }, [gotoPage])
+
+    useEffect(()=>{
+        const cleanup = () => {
+            saveBookmarkToServer()
+          }
+        
+          window.addEventListener('beforeunload', cleanup);
+        
+          return () => {
+            window.removeEventListener('beforeunload', cleanup);
+          }
+    },[])
+
+    const saveBookmarkToServer = async ()=>{
+        // implement
+        console.log('saved')
+    }
 
     const callNext = ()=>{
         dispatch(setPageThreshold(items.length+5))

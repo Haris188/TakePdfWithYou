@@ -34,10 +34,6 @@ export const setPageThreshold = (pgNumber)=>(dispatch, getState)=>{
     const state= getState().pdfViewer
     const pgn = parseInt(pgNumber)
     const itemsLength = state.items.length
-    console.log(pgn, 'pgn')
-    console.log(pgn-itemsLength, 'pgn-items')
-    console.log(state.numPages - pgn, 'numpg-pgn')
-    console.log(state.numPages, 'numpg')
 
     const calculateLength = ()=>{
         if(pgn > parseInt( state.numPages))
