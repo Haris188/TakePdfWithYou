@@ -5,8 +5,8 @@ const mockData = [
         id: '1',
         name: 'Java for Dummies',
         thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
-        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
+        downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FT38_TEST_PAGES.pdf?alt=media&token=44467140-08ad-4ac3-8071-0605ed813b8f',
+        bookmark: '2',
         read: '34'
     },
     {
@@ -14,7 +14,7 @@ const mockData = [
         name: 'Java for Dummies',
         thumb: 'https://images-na.ssl-images-amazon.com/images/I/51KmqPgtZnL._SX258_BO1,204,203,200_.jpg',
         downloadLink: 'https://firebasestorage.googleapis.com/v0/b/take-pdf-with-you.appspot.com/o/1%2FResume.pdf?alt=media&token=bd2fd8af-f1f1-4bec-a185-905901d60d22',
-        bookmark: '3',
+        bookmark: '1',
         read: '34'
     },
     {

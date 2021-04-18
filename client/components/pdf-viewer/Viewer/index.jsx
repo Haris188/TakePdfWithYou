@@ -1,57 +1,109 @@
-import { Container } from '@material-ui/core';
+import { Container, Paper } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
 import  {pdfjs, Document, Page } from 'react-pdf';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import VisibilitySensor from 'react-visibility-sensor'
+import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    scrollIntoView,
+    itemsSelector,
+    setItems,
+    setPageThreshold,
+    gotoSelector,
+    setNumPages,
+    numPagesSelector
+} from '../pdfViewerSlice'
+import $ from 'jquery'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-const Viewer = (props)=>{
-    const initItems = new Array(2)
-    initItems.fill((props)=><Page 
-    pageIndex={0}
-/>)
+const CenterDiv = styled.div`
+    width: max-content;
+    margin: 0 auto;
+    padding: 1em;
+`
+const ContainerDiv = styled.div`
+    width: 100%;
+`
 
-    const [items, setItems] = useState(initItems)
+export const createPageElemFor = (pageIndex)=>{
+    return (props)=>(
+        <Paper style={{marginTop:'1em'}} variant="outlined" elevation={2}>
+            <Page pageIndex={pageIndex} />
+        </Paper>
+    )
+}
+
+const Viewer = (props)=>{
+    const items = useSelector(itemsSelector)
+    const gotoPage = useSelector(gotoSelector)
+    const totalPages = useSelector(numPagesSelector)
+    const dispatch = useDispatch()
+    let lastPage;
+
+    useEffect(async ()=>{
+        dispatch(setItems([]))
+        const doc = await pdfjs.getDocument(props.fileLink)
+        .promise
+
+        console.log(doc.numPages)
+        
+        dispatch(setNumPages(doc.numPages))
+        dispatch(scrollIntoView(props.bookmark))
+    },[])
+
+    useEffect(()=>{
+        console.log('goto called')
+        console.log(gotoPage)
+        var checkExist = setInterval(function() {
+            //console.log($(`#page-${gotoPage}`))
+            if ($(`#page-${gotoPage}`).length) {
+               const el = document.getElementById(`page-${gotoPage}`)
+               el.scrollIntoView()
+               clearInterval(checkExist);
+            }
+         }, 100);
+    }, [gotoPage])
 
     const callNext = ()=>{
-        const newItems =  new Array(10)
-        newItems.fill((props)=><Page 
-        pageIndex={0}
-    />)
-        
-        const xItems = [...items, ...newItems]
-        setItems(xItems)
+        dispatch(setPageThreshold(items.length+5))
     }
 
+    const observer= new IntersectionObserver((entries)=>{
+        const found = entries.find((val=>{
+            return val.isIntersecting
+        }))
+
+        if(found)
+        lastPage = found.target.id.split('-')[1]
+    },{threshold: 0.7})
+
     return (
-        <div>
+        <ContainerDiv>
             <Container>
-                <Document
-                    file={props.fileLink}
-                    onLoadSuccess={()=>{console.log('loaded')}}
-                    onLoadError={(e)=>{console.log(e)}}
-                >
-                   <InfiniteScroll
-                        dataLength={items.length}
-                        next={callNext}
-                        hasMore={true}
-                        loader={<div>Loding...</div>}
-                   >
-                        {items.map((Item, i)=>(
-                            <VisibilitySensor
-                                key={i}
-                                onChange={(isVisible)=>{
-                                    console.log('visible',i)
-                                }}
-                            >
-                                <Item />
-                            </VisibilitySensor>
-                        ))}
-                   </InfiniteScroll>
-                </Document>
+                <CenterDiv>
+                    <Document
+                        file={props.fileLink}
+                        onLoadSuccess={()=>{console.log('loaded')}}
+                        onLoadError={(e)=>{console.log(e)}}
+                    >
+                    <InfiniteScroll
+                            dataLength={items.length}
+                            next={callNext}
+                            hasMore={items.length < totalPages}
+                            loader={<div>Loding...</div>}
+                    >
+                            {items.map((Item, i)=>(
+                                <div key={i} ref={ref=>{if(ref) observer.observe(ref)}} id={`page-${i}`}>
+                                    <Item />
+                                </div>
+                            ))}
+                    </InfiniteScroll>
+                    </Document>
+                </CenterDiv>
             </Container>
-        </div>
+        </ContainerDiv>
     )
 }
 
