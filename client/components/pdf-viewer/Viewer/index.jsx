@@ -16,6 +16,7 @@ import {
     numPagesSelector
 } from '../pdfViewerSlice'
 import $ from 'jquery'
+import {sendSaveBookmarkReq} from '../../../api'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -43,7 +44,8 @@ const Viewer = (props)=>{
     const totalPages = useSelector(numPagesSelector)
     const dispatch = useDispatch()
     const router = useRouter()
-    let lastPage;
+    const [lastPage, setLastPage] = useState(props.bookmark)
+
 
     useEffect(async ()=>{
         dispatch(setItems([]))
@@ -54,12 +56,27 @@ const Viewer = (props)=>{
         dispatch(scrollIntoView(props.bookmark))
     },[])
 
-    useEffect(() => {
-        router.events.on('routeChangeStart', saveBookmarkToServer)
-        return () => {
-          router.events.off('routeChangeStart', saveBookmarkToServer)
-        }
-    }, [router.asPath])
+    useEffect(()=>{
+            let exec = false
+            let done = true
+
+            const inter = setInterval(() => {
+                if(exec)
+                saveBookmarkToServer()
+                exec = !exec
+                done= !done
+                if(done)
+                clearInterval(inter)
+            }, 1000);
+    })
+
+    // useEffect(() => {
+    //     console.log('page event')
+    //     router.events.on('routeChangeStart', saveBookmarkToServer)
+    //     return () => {
+    //       router.events.off('routeChangeStart', saveBookmarkToServer)
+    //     }
+    // }, [router.asPath])
 
     useEffect(()=>{
         var checkExist = setInterval(function() {
@@ -73,7 +90,7 @@ const Viewer = (props)=>{
 
     useEffect(()=>{
         const cleanup = () => {
-            saveBookmarkToServer()
+             saveBookmarkToServer()
           }
         
           window.addEventListener('beforeunload', cleanup);
@@ -83,9 +100,18 @@ const Viewer = (props)=>{
           }
     },[])
 
-    const saveBookmarkToServer = async ()=>{
-        // implement
-        console.log('saved')
+    const saveBookmarkToServer = ()=>{
+        console.log('saving')
+
+        const newRead = parseInt(lastPage)/totalPages * 100
+        const data = {
+            pdfId: props.fileId,
+            bookmark: lastPage,
+            read: newRead
+        }
+
+        console.log(data)
+        sendSaveBookmarkReq(data)
     }
 
     const callNext = ()=>{
@@ -93,13 +119,14 @@ const Viewer = (props)=>{
     }
 
     const observer= new IntersectionObserver((entries)=>{
+        console.log(lastPage, 'lastpage')
         const found = entries.find((val=>{
             return val.isIntersecting
         }))
 
         if(found)
-        lastPage = found.target.id.split('-')[1]
-    },{threshold: 0.7})
+            setLastPage(found.target.id.split('-')[1])
+    },{threshold: 0.5})
 
     return (
         <ContainerDiv>

@@ -1,6 +1,6 @@
 
 import React from 'react'
-
+import {useRouter} from 'next/router'
 import {
     Typography,
     CircularProgress
@@ -61,9 +61,10 @@ const View = ()=>{
     const signupError = useSelector(signupErrorSelector)
     const passwordErr = useSelector(passwordErrorSelector)
     const dispatch = useDispatch()
+    const router = useRouter()
 
     const onSubmit = (data)=>{
-        dispatch(signup(data))    
+        dispatch(signup(data, router))    
     }
 
     return (

@@ -19,6 +19,8 @@ import {
     setUploadError
 } from '../dashboardSlice'
 import { useRouter } from 'next/router'
+import {pdfjs, Document, Page} from 'react-pdf'
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 
 
@@ -74,6 +76,19 @@ const ErrorP = styled.p`
     
 `
 
+const PdfThumbImg = (props)=>{
+    return (
+       <Document
+            file={props.pdf}
+       >
+           <Page
+                scale={0.27}
+                pageIndex={0}
+            />
+       </Document>
+    )
+}
+
 const PdfThumbnail = ({pdf})=>{
     const router = useRouter()
 
@@ -81,6 +96,7 @@ const PdfThumbnail = ({pdf})=>{
         router.push({
             pathname: '/pdf-viewer',
             query: { 
+                fileId: pdf.id,
                 fileLink: pdf.downloadLink,
                 bookmark: pdf.bookmark
             }
@@ -92,7 +108,7 @@ const PdfThumbnail = ({pdf})=>{
             onClick = {navigateToPdfViewer}
             title={pdf.name}
             subtitle={`${pdf.read}% read`}
-            body = {pdf.thumb}
+            body = {()=><PdfThumbImg pdf={pdf.downloadLink}/>}
         />
     )
 }
@@ -135,6 +151,7 @@ const OpenFileTile = (props)=>{
 
         fileInput.onchange = (e)=>{
             const formData = new FormData()
+            formData.append('read', '0')
             formData.append('file', e.target.files[0])
             props.onChoose(formData)
         }

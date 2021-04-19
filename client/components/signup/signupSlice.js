@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { signIn } from "../signin/signInSlice"
+import {sendSignUpReq} from '../../api'
 
 const initialState = {
     loading:false,
@@ -30,15 +31,14 @@ export const {
 } = signupSlice.actions
 
 const sendSignupRequest = async (cred)=>{
-    // MOCK IMPLEMENTATION
-    return null
+    return sendSignUpReq(cred)
 }
 
 const verifyPassMatch = (cred)=>(
     cred.password === cred.confirmPassword
 )
 
-export const signup = (cred)=>async (dispatch)=>{
+export const signup = (cred, router)=>async (dispatch)=>{
     dispatch(setError(false))
     dispatch(setPasswordError(false))
     dispatch(setLoading(true))
@@ -54,7 +54,7 @@ export const signup = (cred)=>async (dispatch)=>{
     if(!res || res.error)
     dispatch(setError(true))
 
-    dispatch(signIn({email: cred.email, password: cred.password}))
+    dispatch(signIn({email: cred.email, password: cred.password}, router))
     dispatch(setLoading(false))
 }
 

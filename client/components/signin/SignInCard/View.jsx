@@ -9,12 +9,15 @@ import {
     withTheme,
     CircularProgress
 } from '@material-ui/core'
+
+import {useRouter} from 'next/router'
 import Link from 'next/link'
 import Flex from '../../Flex'
 import styled from 'styled-components'
 import * as yup from 'yup'
 import {Formik} from 'formik'
 import {useSelector, useDispatch} from 'react-redux'
+
 import {
     loadingSelector,
     loginErrSelector,
@@ -59,12 +62,13 @@ const initialValues = {
 }
 
 const View = ()=>{
+    const router = useRouter()
     const loading = useSelector(loadingSelector)
     const loginError = useSelector(loginErrSelector)
     const dispatch = useDispatch()
 
     const onSubmit = (data)=>{
-        dispatch(signIn(data))    
+        dispatch(signIn(data, router))    
     }
 
     return (

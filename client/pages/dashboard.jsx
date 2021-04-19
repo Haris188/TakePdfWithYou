@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Toolbar from '../components/dashboard/Toolbar'
 import PdfPreviews from '../components/dashboard/PdfPreview'
 import styled from 'styled-components'
+import WithAuthGate from '../components/WithAuthGate'
 
 const Div = styled.div`
     padding-top: 3em;
@@ -19,5 +20,11 @@ const Dashboard = ()=>{
         </Div>
     )
 }
+
+const AuthedDash = ()=>(
+    <WithAuthGate>
+        {Dashboard}
+    </WithAuthGate>
+)
 
 export default Dashboard

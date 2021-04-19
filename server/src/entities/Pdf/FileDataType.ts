@@ -14,4 +14,5 @@ export interface PdfType {
     name?:string
     downloadLink?: string
     bookmark?:string
+    read?: string
 }

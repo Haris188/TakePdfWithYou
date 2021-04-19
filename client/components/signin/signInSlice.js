@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import {sendSignInReq} from '../../api'
 
 const initialState = {
     loading:false,
@@ -24,16 +25,17 @@ export const {
 } = signInSlice.actions
 
 const sendLoginRequest = async (cred)=>{
-    // MOCK IMPLEMENTATION
-    return null
+    return await sendSignInReq(cred.email, cred.password)
 }
 
-export const signIn = (cred)=>async (dispatch)=>{
+export const signIn = (cred, router)=>async (dispatch)=>{
     dispatch(setLoading(true))
     const res = await sendLoginRequest(cred)
 
     if(!res || res.error)
     dispatch(setError(true))
+
+    router.push('/dashboard')
 
     dispatch(setLoading(false))
 }

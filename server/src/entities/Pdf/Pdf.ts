@@ -24,11 +24,11 @@ export default class {
         }
     }
 
-    public async saveBookmark(userId:string, page: string){
+    public async saveBookmark(userId:string, payload: any){
         return await DbAccess.Pdfs.updateWhere(
             userId,
             {id: this.file.id}, 
-            {bookmark: page}
+            {bookmark: payload.bookmark, read: payload.read}
         )
     }
 

@@ -5,7 +5,7 @@ export default (app)=>{
         const result = await actions.saveBookmark(
             req.user.id,
             req.body.pdfId,
-            req.body.bookmark
+            req.body
         )
 
         res.send(result)

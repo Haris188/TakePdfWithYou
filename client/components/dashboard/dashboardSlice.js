@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import {getUserPdfs, sendUploadPdfReq} from '../../api'
 
 const mockData = [
     {
@@ -93,11 +94,12 @@ export const {
 } = dashboardSlice.actions
 
 const getPdfsFromServer = async ()=>{
+    // return await getUserPdfs()
     return mockData
 }
 
-const uploadPdfToServer = async ()=>{
-    return {error: true}
+const uploadPdfToServer = async (fileFormData)=>{
+    return await sendUploadPdfReq(fileFormData)
 }
 
 export const getPdfs = ()=>async (dispatch)=>{

@@ -3,7 +3,8 @@ import * as express from 'express'
 import {
     installPassport,
     installApi,
-    installParsers
+    installParsers,
+    installCors
 } from './middlewares'
 import * as dotenv from 'dotenv'
 
@@ -12,6 +13,7 @@ dotenv.config()
 export default ()=>{
     const app = express()
 
+    installCors(app)
     installParsers(app)
     installPassport(app)
     installApi(app)

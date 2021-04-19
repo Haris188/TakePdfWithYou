@@ -3,6 +3,7 @@ import User, {UserDataType} from '../entities/User'
 
 export default async (userData: UserDataType)=>{
     try{
+        userData.pdfs = []
         const newUser = User.createFromData(userData)
         const res = await newUser.register()
         return res
