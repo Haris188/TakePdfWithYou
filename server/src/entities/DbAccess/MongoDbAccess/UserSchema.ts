@@ -12,9 +12,9 @@ export default class UserSchema implements UserAccessSchema{
     }
 
     public async get(where?: UserDataType){
+        const con = await MongoStore.connectDb()
         try {
-            const con = await MongoStore.connectDb()
-            const query = con.collection('users')
+            const query = con.db.collection('users')
             
             const mongoWhere = modifyIdKeysToMongo(where)
 
@@ -27,12 +27,15 @@ export default class UserSchema implements UserAccessSchema{
             console.log(error)
             throw new Error('MONGO: FAILED TO RETRIEVE DATA')
         }
+        finally {
+            con.connection.close()
+        }
     }
 
     public async store(data: UserDataType){
+        const con = await MongoStore.connectDb()
         try {
-            const con = await MongoStore.connectDb()
-            const query = con.collection('users')
+            const query = con.db.collection('users')
             const modifiedData = modifyIdKeysToMongo(data)
 
             const res = await query.insertOne(modifiedData)
@@ -41,12 +44,15 @@ export default class UserSchema implements UserAccessSchema{
             console.log(error)
             throw new Error('MONGO: FAILED TO STORE DATA')
         }
+        finally {
+            con.connection.close()
+        }
     }
 
     public async updateWhere(where, data){
+        const con = await MongoStore.connectDb()
         try {
-            const con = await MongoStore.connectDb()
-            const query = con.collection('users')
+            const query = con.db.collection('users')
             const modifiedData = modifyIdKeysToMongo(data)
             const modifiedWhere = modifyIdKeysToMongo(where)
 
@@ -55,6 +61,9 @@ export default class UserSchema implements UserAccessSchema{
         } catch (error) {
             console.log(error)
             throw new Error('MONGO: FAILED TO UPDATE THE DATA')
+        }
+        finally {
+            con.connection.close()
         }
     }
 }

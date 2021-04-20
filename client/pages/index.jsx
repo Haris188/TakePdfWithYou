@@ -1,14 +1,27 @@
+import { Container } from '@material-ui/core'
 import Head from 'next/head'
-import SignInCard from '../components/signin/SignInCard'
+import {
+    AppBar,
+    Hero,
+    What,
+    How,
+    CallToAction
+} from '../components/home'
 
 export default function Home() {
   return (
     <div>
       <Head>
-        <title>Sign in</title>          
+        <title>Welcome</title>          
       </Head>
 
-      <SignInCard />
+      <Container>
+          <AppBar />
+          <Hero />
+          <What />
+          <How />
+          <CallToAction />
+      </Container>
     </div>
   )
 }

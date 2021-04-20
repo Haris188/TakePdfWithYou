@@ -13,7 +13,7 @@ const connectDb = async ()=>{
             useUnifiedTopology: true
         })
         const db = connection.db('pdf')
-        return db
+        return {db, connection}
     } catch (error) {
         throw new Error('FAILED TO CONNECT TO MONGO DB')
     }
@@ -41,6 +41,10 @@ export const revertKeyModification = (res)=>{
         return res.map(val =>(modifyIdKeysToMongo(val, true)))
     }
     return res
+}
+
+export const disconnect = async (db)=>{
+    db.close()
 }
 
 

@@ -49,4 +49,4 @@ const PdfViewerGate = ()=>(
     </WithAuthGate>
 )
 
-export default PdfViewer
+export default PdfViewerGate

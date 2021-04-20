@@ -8,9 +8,9 @@ import MongoStore, { modifyIdKeysToMongo, revertKeyModification } from './MongoS
 
 export default class PdfSchema implements PdfAccessSchema{
     public async appendPdf(pdfInfo, userId){
+        const con = await MongoStore.connectDb()
         try {
-            const con = await MongoStore.connectDb()
-            const query = con.collection('users')
+            const query = con.db.collection('users')
 
             const mongoWhere = modifyIdKeysToMongo({id:userId})
 
@@ -23,12 +23,15 @@ export default class PdfSchema implements PdfAccessSchema{
             console.log(error)
             throw new Error('MONGO:FAILED TO APPEND PDF')
         }
+        finally {
+            con.connection.close()
+        }
     }
 
     public async getWhere(where: PdfType){
+        const con = await MongoStore.connectDb()
         try {
-            const con = await MongoStore.connectDb()
-            const query = con.collection('users')
+            const query = con.db.collection('users')
 
             const mongoWhere = modifyIdKeysToMongo(where)
 
@@ -41,12 +44,15 @@ export default class PdfSchema implements PdfAccessSchema{
             console.log(error)
             throw new Error('MONGO: FAILED TO GET PDFS')
         }
+        finally {
+            con.connection.close()
+        }
     }
 
     public async updateWhere(userId:string, where: PdfType, data: PdfType){
+        const con = await MongoStore.connectDb()
         try{
-            const con = await MongoStore.connectDb()
-            const query = con.collection('users')
+            const query = con.db.collection('users')
 
             const getRes = await query.findOne({_id:userId})
             const pdfs = getRes && getRes.pdfs
@@ -64,6 +70,9 @@ export default class PdfSchema implements PdfAccessSchema{
             console.log(e)
             throw new Error('FAILED TO  UPDATE PDF DATA')
             return null
+        }
+        finally {
+            con.connection.close()
         }
     }
 }

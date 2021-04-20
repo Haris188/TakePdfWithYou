@@ -60,23 +60,15 @@ const Viewer = (props)=>{
             let exec = false
             let done = true
 
-            const inter = setInterval(() => {
+            const inter = setInterval(async () => {
                 if(exec)
-                saveBookmarkToServer()
+                await saveBookmarkToServer()
                 exec = !exec
                 done= !done
                 if(done)
                 clearInterval(inter)
             }, 1000);
-    })
-
-    // useEffect(() => {
-    //     console.log('page event')
-    //     router.events.on('routeChangeStart', saveBookmarkToServer)
-    //     return () => {
-    //       router.events.off('routeChangeStart', saveBookmarkToServer)
-    //     }
-    // }, [router.asPath])
+    }, [lastPage])
 
     useEffect(()=>{
         var checkExist = setInterval(function() {
@@ -88,19 +80,7 @@ const Viewer = (props)=>{
          }, 100);
     }, [gotoPage])
 
-    useEffect(()=>{
-        const cleanup = () => {
-             saveBookmarkToServer()
-          }
-        
-          window.addEventListener('beforeunload', cleanup);
-        
-          return () => {
-            window.removeEventListener('beforeunload', cleanup);
-          }
-    },[])
-
-    const saveBookmarkToServer = ()=>{
+    const saveBookmarkToServer = async()=>{
         console.log('saving')
 
         const newRead = parseInt(lastPage)/totalPages * 100
@@ -111,7 +91,7 @@ const Viewer = (props)=>{
         }
 
         console.log(data)
-        sendSaveBookmarkReq(data)
+        await sendSaveBookmarkReq(data)
     }
 
     const callNext = ()=>{

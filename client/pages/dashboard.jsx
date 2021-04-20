@@ -21,10 +21,10 @@ const Dashboard = ()=>{
     )
 }
 
-const AuthedDash = ()=>(
+const DashboardGate = ()=>(
     <WithAuthGate>
         {Dashboard}
     </WithAuthGate>
 )
 
-export default Dashboard
+export default DashboardGate

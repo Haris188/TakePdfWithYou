@@ -94,8 +94,8 @@ export const {
 } = dashboardSlice.actions
 
 const getPdfsFromServer = async ()=>{
-    // return await getUserPdfs()
-    return mockData
+    return await getUserPdfs()
+    // return mockData
 }
 
 const uploadPdfToServer = async (fileFormData)=>{
