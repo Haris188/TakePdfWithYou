@@ -7,6 +7,14 @@ import {
     How,
     CallToAction
 } from '../components/home'
+import styled from 'styled-components'
+
+const HeroAreaStyles = styled.div`
+  background: rgb(133,126,177);
+  background: linear-gradient(124deg, rgba(133,126,177,1) 0%, rgba(96,88,145,1) 100%);
+  color: white;
+  height: 100vh;
+`
 
 export default function Home() {
   return (
@@ -15,13 +23,13 @@ export default function Home() {
         <title>Welcome</title>          
       </Head>
 
-      <Container>
-          <AppBar />
-          <Hero />
-          <What />
-          <How />
-          <CallToAction />
-      </Container>
+      <HeroAreaStyles>
+        <AppBar />
+        <Hero />
+      </HeroAreaStyles>
+      <What />
+      <How />
+      <CallToAction />
     </div>
   )
 }
