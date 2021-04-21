@@ -49,6 +49,7 @@ export const signup = (cred, router)=>async (dispatch)=>{
         return
     }
 
+    delete cred.confirmPassword
     const res = await sendSignupRequest(cred)
 
     if(!res || res.error)

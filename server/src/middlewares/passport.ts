@@ -2,6 +2,7 @@ import * as passport from 'passport'
 import * as passportJwt from 'passport-jwt'
 import * as passportLocal from 'passport-local'
 import actions from '../actions'
+import * as bcrypt from 'bcrypt'
 
 const ExtractJwt = passportJwt.ExtractJwt
 const LocalStrategy = passportLocal.Strategy
@@ -12,10 +13,14 @@ export default (app)=>{
         usernameField: 'email',
         passwordField: 'password'
     }, (email, password, cb)=>{
-        return actions.getUserWithEmailAndPass(email, password)
+        return actions.getUserWithEmail(email)
         .then(user=>{
-            console.log(user)
-            if(!user) return cb(null, false,{message: "Incorrect email or password"})
+            if(!user) 
+            return cb(null, false,{message: "Incorrect email"})
+
+            if(!bcrypt.compare(password, user.password))
+            return cb(null, false,{message: "Incorrect password"})
+
             return cb(null, user, {message:'Logged in successfully'})
         })
         .catch(e=>{

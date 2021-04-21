@@ -1,6 +1,7 @@
 
 import {UserDataType} from '.'
 import DbAccess from '../DbAccess'
+import * as bcrypt from 'bcrypt'
 
 export default class User{
     private userData:UserDataType
@@ -20,7 +21,25 @@ export default class User{
         : null
     }
 
+    public static async getWhere(where){
+        const res = await DbAccess.Users.get(where)
+        return res.length > 0
+        ? new this(res[0])
+        : null
+    }
+
+    private async hashPassword(){
+        const hashed = await bcrypt.hash(
+            this.userData.password,
+            10
+        )
+
+        this.userData.password = hashed
+    }
+
     public async register(){
+        await this.hashPassword()
+
         return await DbAccess
         .Users.store(this.userData)
     }

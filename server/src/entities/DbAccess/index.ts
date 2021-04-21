@@ -4,7 +4,9 @@ import TestDbAccess from './TestDbAccess'
 import MongoDbAccess from './MongoDbAccess'
 
 dotenv.config()
-const datastore = MongoDbAccess
+const datastore = process.env.NODE_ENV ==='test'
+    ? TestDbAccess
+    : MongoDbAccess
 
 export default datastore
 export * as mockFailedDbResponses from './mockFailedDbResponses'

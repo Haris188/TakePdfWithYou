@@ -6,6 +6,7 @@ import uploadPdf from './uploadPdf'
 import saveBookmark from './saveBookmark'
 import getPdfInfo from './getPdfsInfo'
 import getUserWithId from './getUserWithId'
+import getUserWithEmail from './getUserWithEmail'
 
 export default {
     registerUser,
@@ -14,5 +15,6 @@ export default {
     uploadPdf,
     saveBookmark,
     getPdfInfo,
-    getUserWithId
+    getUserWithId,
+    getUserWithEmail
 }
