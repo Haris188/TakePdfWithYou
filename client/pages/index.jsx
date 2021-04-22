@@ -13,7 +13,9 @@ const HeroAreaStyles = styled.div`
   background: rgb(133,126,177);
   background: linear-gradient(124deg, rgba(133,126,177,1) 0%, rgba(96,88,145,1) 100%);
   color: white;
-  height: 100vh;
+  min-height: 100vh;
+  display:flex;
+  flex-direction:column;
 `
 
 export default function Home() {

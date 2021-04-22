@@ -1,23 +1,8 @@
 import React from 'react'
-import {Button as MuiButton, Container} from '@material-ui/core'
+import {Button as MuiButton, Container as MuiContainer} from '@material-ui/core'
 import styled from 'styled-components'
 import {useRouter} from 'next/router'
 
-const FlexContainer = styled.div`
-    overflow:hidden;
-    text-align: center;
-    display:flex;
-    flex-direction:column;
-    height:100%;
-    justify-content: center;
-
-    @media only screen and (min-width: 1400px){
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: space-between;
-        text-align: left;
-    }
-`
 const HeroImg = styled.img`
     max-width: 100%;
     margin: 0 auto;
@@ -63,6 +48,25 @@ const ContentDiv = styled.div`
         max-width: 480px;
     }
 `
+const Container = styled(MuiContainer)`
+    && {
+        height:90%;
+        flex-grow:1;
+
+    text-align: center;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    justify-content: center;
+
+    @media only screen and (min-width: 1400px){
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+    }
+    }
+`
 
 const Hero = ()=>{
     const headline = 'Do you read your pdfs on Desktop and Mobile and Tablet and....'
@@ -75,8 +79,7 @@ const Hero = ()=>{
     }
 
     return (
-        <Container style={{height:"90%"}}>
-            <FlexContainer>
+        <Container>
                 <HeroImg 
                     src="/hero_ill.svg" 
                     alt="hero img"
@@ -93,7 +96,6 @@ const Hero = ()=>{
                         Get Started
                     </Button>
                 </ContentDiv>
-            </FlexContainer>
         </Container>
     )
 }

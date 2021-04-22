@@ -29,6 +29,11 @@ a {
 }
 
 
-@media only screen and (min-width:900px){
- 
+@media only screen and (min-width:600px){
+  .reverse{
+    direction:rtl;
+  }
+  .content-div{
+    margin-left: 1em;
+  }
 }
