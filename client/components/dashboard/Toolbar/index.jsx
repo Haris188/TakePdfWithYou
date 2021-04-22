@@ -4,6 +4,8 @@ import {
 } from '@material-ui/core'
 import React from 'react'
 import styled from 'styled-components'
+import {useDispatch} from 'react-redux'
+import {filterPdfs} from '../dashboardSlice'
 
 const H1 = styled.h1`
     color: ${props=>props.theme.palette.primary.main}
@@ -37,22 +39,31 @@ const Container = styled(MaterialContainer)`
     margin-bottom: 2em;
 `
 
-const ToolBar = ()=>(
-    <Container>
-        <WithFlexMediaQuery>
-            <StyledDiv>
-                <H1>Your Pdfs</H1>
-                <P>Here is a list of pdfs that your are reading</P>
-            </StyledDiv>
-            <TextField
-                color="primary"
-                variant="filled"
-                placeholder="Search with file name"
-                label = "Search"
-                fullWidth
-            />
-        </WithFlexMediaQuery>
-    </Container>
-)
+const ToolBar = ()=>{
+    const dispatch = useDispatch()
+
+    const searchTerm = ({target})=>{
+        dispatch(filterPdfs(target.value))
+    }
+
+    return (
+        <Container>
+            <WithFlexMediaQuery>
+                <StyledDiv>
+                    <H1>Your Pdfs</H1>
+                    <P>Here is a list of pdfs that your are reading</P>
+                </StyledDiv>
+                <TextField
+                    color="primary"
+                    variant="filled"
+                    placeholder="Search with file name"
+                    label = "Search"
+                    onChange = {searchTerm}
+                    fullWidth
+                />
+            </WithFlexMediaQuery>
+        </Container>
+    )
+}
 
 export default ToolBar

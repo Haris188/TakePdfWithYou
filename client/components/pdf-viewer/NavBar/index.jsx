@@ -8,6 +8,7 @@ import {
 } from '../pdfViewerSlice'
 
 const ContainerDiv = styled.div`
+    font-size: 1em;
     position:fixed;
     width: 100%;
     z-index: 1;

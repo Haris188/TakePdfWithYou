@@ -64,6 +64,7 @@ const initialState = {
     loading: false,
     error: false,
     uploadError: false,
+    filteredPdfs:[],
     pdfs:[]
 }
 
@@ -82,6 +83,9 @@ const dashboardSlice = createSlice({
         },
         setUploadError: (state, {payload})=>{
             state.uploadError = payload
+        },
+        setFilteredPdfs: (state, {payload})=>{
+            state.filteredPdfs = payload
         }
     }
 })
@@ -90,7 +94,8 @@ export const {
     setLoading,
     setPdfs,
     setError,
-    setUploadError
+    setUploadError,
+    setFilteredPdfs
 } = dashboardSlice.actions
 
 const getPdfsFromServer = async ()=>{
@@ -109,11 +114,13 @@ export const getPdfs = ()=>async (dispatch)=>{
     if(!res || res.error){
         dispatch(setError(true))
         dispatch(setPdfs([]))
+        dispatch(setFilteredPdfs([]))
         dispatch(setLoading(false))
         return
     }
 
     dispatch(setPdfs(res))
+    dispatch(setFilteredPdfs(res))
     dispatch(setLoading(false))
 }
 
@@ -130,6 +137,21 @@ export const uploadFile = (fileFormData)=> async (dispatch)=>{
     dispatch(getPdfs())
 }
 
+export const filterPdfs = (searchTerm)=>(dispatch, getState)=>{
+    const state = getState().dashboard
+
+    if(searchTerm === ''){
+        dispatch(setFilteredPdfs(state.pdfs))
+    }
+    else{
+        dispatch(setFilteredPdfs(
+            state.pdfs.filter(pdf=>(
+                new RegExp(`${searchTerm}`,'i').test(pdf.name)
+            ))
+        ))
+    }
+}
+
 export const uploadErrorSelector = (state)=>(
     state.dashboard.uploadError
 )
@@ -143,7 +165,7 @@ export const errSelector = (state)=>(
 )
 
 export const pdfsSelector = (state)=>(
-    state.dashboard.pdfs
+    state.dashboard.filteredPdfs
 )
 
 export default dashboardSlice.reducer

@@ -8,6 +8,7 @@ import WithAuthGate from '../components/WithAuthGate'
 
 const ContainerDiv = styled.div`
     width: 100vw;
+    overflow:scroll;
 `
 
 const PdfViewer = ()=>{
