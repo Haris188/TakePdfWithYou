@@ -49,13 +49,13 @@ Server architecture includes the following components
 
 Note that everything has a dependecy flow on Entities and Entities are the business rules. Everything else is replacable
 
-#### Interface Boudary
+### Interface Boudary
 With the help of ExpressJS, we have established an interface boundary, which is nothing but simple REST API endpoint.
-#### Interactors
+### Interactors
 Interactors are the dispatchers for a job to be done, e.g signup, signin. They use the entities to perform a task and return the result.
-#### Entities
+### Entities
 Entites are the components that deals with the logic of business rules. For example PDF entity deals with the actions performed on a PDF file e.g `saveBookmark()`
-#### FileStore, DataStore and AuthenticationLib
+### FileStore, DataStore and AuthenticationLib
 These components provide an interface of the app to the 3rd party libraries or frameworks. This is because we do not want to be dependent on 3rd party libraries. This configration allows you to change from MongoDB to MySQL by just implementing the interfaces.
 ### Client Architecture
 Client has a relatively simple architecture. It includes
@@ -64,11 +64,11 @@ Client has a relatively simple architecture. It includes
 2. Container
 3. Views
 
-#### API Boundary
+### API Boundary
 These are just the functions that provides an interface for REST API (server). They make use of Axios to make calls
-#### Container
+### Container
 Container is the logical component. It only contains the logic that a View needs. Redux slice in this case.
-#### View
+### View
 View is dumb. It does not have any logic and it only has the JSX code for React. It uses Container for its logic.
 ## Contributors
 Ahmad Nadeem\
