@@ -5,7 +5,8 @@ import {
     Hero,
     What,
     How,
-    CallToAction
+    CallToAction,
+    Footer
 } from '../components/home'
 import styled from 'styled-components'
 
@@ -32,6 +33,7 @@ export default function Home() {
       <What />
       <How />
       <CallToAction />
+      <Footer />
     </div>
   )
 }
