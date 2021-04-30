@@ -83,15 +83,17 @@ const Viewer = (props)=>{
     const saveBookmarkToServer = async()=>{
         console.log('saving')
 
-        const newRead = parseInt(lastPage)/totalPages * 100
-        const data = {
-            pdfId: props.fileId,
-            bookmark: lastPage,
-            read: newRead
+        const newRead = Math.ceil(parseInt(lastPage)/totalPages * 100)
+        if(newRead && parseInt(newRead) < parseInt(totalPages)){
+            const data = {
+                pdfId: props.fileId.toString(),
+                bookmark: lastPage.toString(),
+                read: newRead.toString()
+            }
+    
+            console.log(data)
+            await sendSaveBookmarkReq(data)
         }
-
-        console.log(data)
-        await sendSaveBookmarkReq(data)
     }
 
     const callNext = ()=>{
