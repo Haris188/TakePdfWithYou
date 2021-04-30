@@ -8,20 +8,20 @@ const steps = [
         place:1,
         title: 'Add your file to app',
         body: 'Add to add the file you want to take with you',
-        videoUrl: 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4'
+        videoUrl: '/step_1.mp4'
     },
     {
         place:2,
         title: 'Read and Close without worry',
         body: 'Your last read page will automatically be saved',
-        videoUrl: 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4',
+        videoUrl: '/step_2.mp4',
         reverse:true
     },
     {
         place:3,
         title: 'Reopen on another device',
         body: 'You can continue reading on another device from where you left reading on your previous device or session',
-        videoUrl: 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4'
+        videoUrl: '/step_3.mp4'
     }
 ]
 
@@ -62,7 +62,7 @@ const Video = styled.div`
 
     video {
         position: absolute; 
-        top: -16.75%; 
+        top: 0; 
         left: 0; 
         width: 100%; 
     }
@@ -80,6 +80,7 @@ const VideoDiv = styled.div`
     height:100%;
     width:100%;
     max-width: 480px;
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
      @media only screen and (min-width:600px){
         margin-left: 1em;
         justify-self: end;
