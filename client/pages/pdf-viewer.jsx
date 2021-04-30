@@ -23,8 +23,6 @@ const PdfViewer = ()=>{
         setQueryData(router.query)
     },[])
 
-    console.log(queryData)
-
     return (
         <ContainerDiv>
             <Head>

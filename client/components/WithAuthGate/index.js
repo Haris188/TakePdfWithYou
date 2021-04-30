@@ -10,8 +10,6 @@ const WithAuthGate = (props) => {
   const Child = children;
   const router = useRouter()
 
-  console.log('AUTH GATE');
-
   const fetchCurrentUserFromApi = async () => {
     const res = await getCurrentUser();
     if (res) {

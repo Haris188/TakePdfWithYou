@@ -81,7 +81,6 @@ const Viewer = (props)=>{
     }, [gotoPage])
 
     const saveBookmarkToServer = async()=>{
-        console.log('saving')
 
         const newRead = Math.ceil(parseInt(lastPage)/totalPages * 100)
         if(newRead && parseInt(newRead) < parseInt(totalPages)){
@@ -90,8 +89,7 @@ const Viewer = (props)=>{
                 bookmark: lastPage.toString(),
                 read: newRead.toString()
             }
-    
-            console.log(data)
+
             await sendSaveBookmarkReq(data)
         }
     }
@@ -101,7 +99,6 @@ const Viewer = (props)=>{
     }
 
     const observer= new IntersectionObserver((entries)=>{
-        console.log(lastPage, 'lastpage')
         const found = entries.find((val=>{
             return val.isIntersecting
         }))
@@ -116,7 +113,6 @@ const Viewer = (props)=>{
                 <CenterDiv>
                     <Document
                         file={props.fileLink}
-                        onLoadSuccess={()=>{console.log('loaded')}}
                         onLoadError={(e)=>{console.log(e)}}
                     >
                     <InfiniteScroll
