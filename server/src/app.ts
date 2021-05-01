@@ -18,7 +18,7 @@ export default ()=>{
     installPassport(app)
     installApi(app)
     
-    app.listen(process.env.EXPRESS_PORT, ()=>{
+    app.listen(process.env.PORT, ()=>{
         console.log('SERVER: running at ' + process.env.PORT)
     })
 }
