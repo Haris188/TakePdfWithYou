@@ -15,6 +15,7 @@ const connectDb = async ()=>{
         const db = connection.db('pdf')
         return {db, connection}
     } catch (error) {
+        console.log(error)
         throw new Error('FAILED TO CONNECT TO MONGO DB')
     }
 }
