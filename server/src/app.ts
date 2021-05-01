@@ -19,6 +19,6 @@ export default ()=>{
     installApi(app)
     
     app.listen(process.env.EXPRESS_PORT, ()=>{
-        console.log('SERVER: running at ' + process.env.EXPRESS_PORT)
+        console.log('SERVER: running at ' + process.env.PORT)
     })
 }
