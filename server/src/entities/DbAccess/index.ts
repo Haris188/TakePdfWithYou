@@ -8,5 +8,7 @@ const datastore = process.env.NODE_ENV ==='test'
     ? TestDbAccess
     : MongoDbAccess
 
+// const datastore = MongoDbAccess
+
 export default datastore
 export * as mockFailedDbResponses from './mockFailedDbResponses'
