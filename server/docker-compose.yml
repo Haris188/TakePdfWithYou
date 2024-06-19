@@ -1,0 +1,8 @@
+services:
+  api:
+    build: .
+    container_name: tpwy_node_api
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
