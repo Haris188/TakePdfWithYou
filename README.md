@@ -78,3 +78,4 @@ View is dumb. It does not have any logic and it only has the JSX code for React.
 ## Contributors
 Ahmad Nadeem\
 Haris Ahmad
+
