@@ -74,6 +74,8 @@ These are just the functions that provides an interface for REST API (server). T
 ### Container
 Container is the logical component. It only contains the logic that a View needs. Redux slice in this case.
 ### View
+
+
 View is dumb. It does not have any logic and it only has the JSX code for React. It uses Container for its logic.
 ## Contributors
 Ahmad Nadeem\
